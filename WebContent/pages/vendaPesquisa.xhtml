@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<ui:composition template="/templates/modeloGeral.xhtml">
+	<ui:define name="metadata">
+		<f:metadata>
+			<f:event listener="#{vendaBean.carregarPesquisaVenda}"
+				type="preRenderView" />
+		</f:metadata>
+	</ui:define>
+	
+	<ui:define name="conteudo">
+		<h:form>
+			<p:toolbar>
+				<f:facet name="left">
+					<h:outputText value="Vendas" />
+				</f:facet>
+			</p:toolbar>
+			
+			<p:dataTable emptyMessage="Nenhum registro encontrado"
+				value="#{vendaBean.listaVendas}"
+				filteredValue="#{vendaBean.listaVendasFiltrados}"
+				var="produto" rows="8" paginator="true">
+
+				<f:facet name="footer">
+					<p:button value="Novo" outcome="/pages/vendaCadastro.xhtml">
+						<f:param name="proacao" value="Novo" />
+					</p:button>
+				</f:facet>
+
+				<p:column headerText="Código">
+					<h:outputText value="#{venda.codigo}" />
+				</p:column>
+
+				<p:column headerText="Horario" filterBy="#{venda.horario}"
+					sortBy="#{venda.horario}">
+					<h:outputText value="#{venda.horario}" />
+				</p:column>
+				
+				<p:column headerText="Nome" sortBy="#{venda.nome}">
+					<h:outputText value="#{venda.nome}" />
+				</p:column>
+				
+				<p:column headerText="Valor">
+					<h:outputText value="#{venda.valor}" />
+				</p:column>
+				
+					
+					<p:separator />
+					
+			<h:panelGrid columns="1">
+			
+			<p:commandButton value="Informações" 
+			actionListener="#{produtoBean.carregarPesquisa}"
+			oncomplete="PF('wvDlgFinProduto').show();" 
+			update=":frmFinProduto:pnlDadosFinProduto"/>
+			</h:panelGrid>
+					
+				</p:column>
+			</p:dataTable>
+			
+			<p:separator />
+			
+		</h:form>
+		
+		<p:dialog closable="true" draggable="true" modal="true"
+	 resizable="false" header="Informações" widgetVar="wvDlgFinProduto"
+	 appendTo="@(body)">
+	<h:form id="frmFinProduto">
+		<p:panelGrid id="pnlDadosFinProduto" columns="2">
+			
+		</p:panelGrid>
+		<h:panelGrid columns="2">
+			<p:button value="Clique aqui" outcome="/pages/infor.xhtml">
+						<f:param name="proacao" value="buscarPorCodigo" />
+						<f:param name="procod" value="#{produto.codigo}" />
+					</p:button>
+		</h:panelGrid>
+	</h:form>
+	</p:dialog>
+		
+	</ui:define>
+</ui:composition>
+</html>
